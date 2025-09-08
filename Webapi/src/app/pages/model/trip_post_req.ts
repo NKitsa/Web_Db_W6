@@ -1,13 +1,8 @@
-export interface API {
-description: any;
-participants: any;
-endLocation: any;
-startLocation: any;
+export interface ReqPostput {
     idx:           number;
     name:          string;
     country:       string;
     destinationid: number;
-    coverimage:    string;
     detail:        string;
     price:         number;
     duration:      number;

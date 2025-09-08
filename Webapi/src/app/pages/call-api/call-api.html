@@ -1,1 +1,44 @@
-<button mat-raised-button color="primary" (click)="callApi()">Call API</button>
+<div class="container">
+  <!-- ปุ่มเรียก API -->
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="callApi()">
+      Call API
+    </button>
+  </div>
+
+  <!-- ส่วนค้นหาชื่อทริป -->
+  <div class="search-section">
+    <mat-form-field appearance="outline">
+      <mat-label>ค้นหาชื่อทริป</mat-label>
+      <input matInput #name placeholder="กรอกชื่อทริปที่ต้องการค้นหา"/>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="findname(name)" [disabled]="isLoading">
+      {{ isLoading ? 'กำลังค้นหา...' : 'FindName' }}
+    </button>
+  </div>
+
+  <!-- แสดงผลลัพธ์การค้นหา -->
+  <div class="results-section" *ngIf="trips.length > 0 || isLoading">
+    <h3>ผลการค้นหา</h3>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading">
+      กำลังโหลดข้อมูล...
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="!isLoading && trips.length === 0" class="no-results">
+      ไม่พบข้อมูลทริปที่ค้นหา
+    </div>
+
+    <div *ngFor="let t of trips" class="trip-card">
+      <p><strong>ชื่อทริป:</strong> {{ t.name }}</p>
+      <p><strong>ประเทศ:</strong> {{ t.country }}</p>
+      <p><strong>Destination ID:</strong> {{ t.destinationid }}</p>
+      <p><strong>รายละเอียด:</strong> {{ t.detail }}</p>
+      <p><strong>ระยะเวลา:</strong> {{ t.duration }}</p>
+      <p><strong>รูปภาพ:</strong></p>
+      <img *ngIf="t.coverimage" [src]="t.coverimage" alt="{{ t.name }}" class="trip-image"/>
+    </div>
+  </div>
+</div>
