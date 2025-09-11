@@ -1,44 +1,236 @@
-<div class="container">
-  <!-- ปุ่มเรียก API -->
-  <div class="action-buttons">
-    <button mat-raised-button color="primary" (click)="callApi()">
-      Call API
-    </button>
+<div class="trip-search-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>🌍 Trip Explorer</h1>
+    <p>ค้นหาและสำรวจสถานที่ท่องเที่ยวที่น่าสนใจ</p>
   </div>
 
-  <!-- ส่วนค้นหาชื่อทริป -->
+  <!-- Search Section -->
   <div class="search-section">
-    <mat-form-field appearance="outline">
-      <mat-label>ค้นหาชื่อทริป</mat-label>
-      <input matInput #name placeholder="กรอกชื่อทริปที่ต้องการค้นหา"/>
-    </mat-form-field>
-    <button mat-raised-button color="primary" (click)="findname(name)" [disabled]="isLoading">
-      {{ isLoading ? 'กำลังค้นหา...' : 'FindName' }}
-    </button>
+    <div class="search-filters">
+      <!-- Search by ID -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>ค้นหาด้วยหมายเลข (ID)</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchId"
+          placeholder="กรอกหมายเลขสถานที่"
+          (keyup)="onSearchIdKeyup($event)"
+          type="number"
+        />
+        <mat-icon matSuffix>tag</mat-icon>
+      </mat-form-field>
+
+      <!-- Search by Name -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>ค้นหาด้วยชื่อสถานที่</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchName"
+          placeholder="กรอกชื่อสถานที่"
+          (keyup)="onSearchNameKeyup($event)"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <!-- Search by Country -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>เลือกประเทศ</mat-label>
+        <mat-select
+          [(ngModel)]="selectedCountry"
+          (selectionChange)="searchByCountry()"
+        >
+          <mat-option value="">-- เลือกประเทศ --</mat-option>
+          <mat-option *ngFor="let country of countries" [value]="country">
+            {{ country }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>public</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="searchById()"
+        [disabled]="!searchId"
+      >
+        <mat-icon>search</mat-icon>
+        ค้นหาด้วย ID
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="searchByName()"
+        [disabled]="!searchName"
+      >
+        <mat-icon>location_on</mat-icon>
+        ค้นหาด้วยชื่อ
+      </button>
+
+      <button mat-raised-button color="accent" (click)="loadAllTrips()">
+        <mat-icon>refresh</mat-icon>
+        แสดงทั้งหมด
+      </button>
+
+      <button mat-stroked-button (click)="clearAllFilters()">
+        <mat-icon>clear</mat-icon>
+        ล้างการค้นหา
+      </button>
+    </div>
   </div>
 
-  <!-- แสดงผลลัพธ์การค้นหา -->
-  <div class="results-section" *ngIf="trips.length > 0 || isLoading">
-    <h3>ผลการค้นหา</h3>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>กำลังค้นหา...</p>
+  </div>
 
-    <!-- Loading -->
-    <div *ngIf="isLoading" class="loading">
-      กำลังโหลดข้อมูล...
+  <!-- Results Section -->
+  <div *ngIf="!isLoading" class="results-section">
+    <div class="results-header">
+      <h2>ผลการค้นหา ({{ trips.length }} รายการ)</h2>
     </div>
 
     <!-- No Results -->
-    <div *ngIf="!isLoading && trips.length === 0" class="no-results">
-      ไม่พบข้อมูลทริปที่ค้นหา
+    <div *ngIf="trips.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <h3>ไม่พบผลการค้นหา</h3>
+      <p>ลองปรับเปลี่ยนเงื่อนไขการค้นหา หรือแสดงรายการทั้งหมด</p>
     </div>
 
-    <div *ngFor="let t of trips" class="trip-card">
-      <p><strong>ชื่อทริป:</strong> {{ t.name }}</p>
-      <p><strong>ประเทศ:</strong> {{ t.country }}</p>
-      <p><strong>Destination ID:</strong> {{ t.destinationid }}</p>
-      <p><strong>รายละเอียด:</strong> {{ t.detail }}</p>
-      <p><strong>ระยะเวลา:</strong> {{ t.duration }}</p>
-      <p><strong>รูปภาพ:</strong></p>
-      <img *ngIf="t.coverimage" [src]="t.coverimage" alt="{{ t.name }}" class="trip-image"/>
+    <!-- Trip Cards -->
+    <div *ngIf="trips.length > 0" class="trip-grid">
+      <mat-card
+        *ngFor="let trip of trips"
+        class="trip-card"
+        (click)="showTripDetails(trip)"
+      >
+        <div class="card-image">
+          <img
+            [src]="trip.coverimage"
+            [alt]="trip.name"
+            onerror="this.src='assets/placeholder.jpg'"
+          />
+          <div class="card-overlay">
+            <span class="price">฿{{ trip.price.toLocaleString() }}</span>
+          </div>
+        </div>
+
+        <mat-card-content>
+          <div class="card-header">
+            <h3>{{ trip.name }}</h3>
+            <span class="trip-id">#{{ trip.idx }}</span>
+          </div>
+
+          <div class="card-info">
+            <div class="info-item">
+              <mat-icon>public</mat-icon>
+              <span>{{ trip.country }}</span>
+            </div>
+            <div class="info-item">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ trip.duration }} วัน</span>
+            </div>
+            <div class="info-item">
+              <mat-icon>map</mat-icon>
+              <span>{{ trip.destination_zone }}</span>
+            </div>
+          </div>
+
+          <p class="trip-description">
+            {{ trip.detail | slice : 0 : 100
+            }}{{ trip.detail.length > 100 ? "..." : "" }}
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button color="primary">
+            <mat-icon>visibility</mat-icon>
+            ดูรายละเอียด
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Trip Details Modal -->
+  <div
+    *ngIf="showDetails && selectedTrip"
+    class="modal-overlay"
+    (click)="closeTripDetails()"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ selectedTrip.name }}</h2>
+        <button mat-icon-button (click)="closeTripDetails()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-image">
+          <img
+            [src]="selectedTrip.coverimage"
+            [alt]="selectedTrip.name"
+            onerror="this.src='assets/placeholder.jpg'"
+          />
+        </div>
+
+        <div class="detail-info">
+          <div class="info-grid">
+            <div class="info-card">
+              <mat-icon>tag</mat-icon>
+              <div>
+                <span class="label">หมายเลข</span>
+                <span class="value">#{{ selectedTrip.idx }}</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <mat-icon>attach_money</mat-icon>
+              <div>
+                <span class="label">ราคา</span>
+                <span class="value"
+                  >฿{{ selectedTrip.price.toLocaleString() }}</span
+                >
+              </div>
+            </div>
+
+            <div class="info-card">
+              <mat-icon>schedule</mat-icon>
+              <div>
+                <span class="label">ระยะเวลา</span>
+                <span class="value">{{ selectedTrip.duration }} วัน</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <mat-icon>public</mat-icon>
+              <div>
+                <span class="label">ประเทศ</span>
+                <span class="value">{{ selectedTrip.country }}</span>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <mat-icon>map</mat-icon>
+              <div>
+                <span class="label">ทวีป/เขต</span>
+                <span class="value">{{ selectedTrip.destination_zone }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="description-section">
+            <h3>รายละเอียด</h3>
+            <p>{{ selectedTrip.detail }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
