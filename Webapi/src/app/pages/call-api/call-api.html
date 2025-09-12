@@ -9,17 +9,18 @@
   <div class="search-section">
     <div class="search-filters">
       <!-- Search by ID -->
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>ค้นหาด้วยหมายเลข (ID)</mat-label>
-        <input
-          matInput
-          [(ngModel)]="searchId"
-          placeholder="กรอกหมายเลขสถานที่"
-          (keyup)="onSearchIdKeyup($event)"
-          type="number"
-        />
-        <mat-icon matSuffix>tag</mat-icon>
-      </mat-form-field>
+      <div class="search-container">
+        <!-- กล่องกรอก ID -->
+        <mat-form-field>
+          <mat-label>ค้นหาด้วย ID</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="กรอก Trip ID เช่น 1, 2, 3..."
+            [(ngModel)]="searchId"
+          />
+        </mat-form-field>
+      </div>
 
       <!-- Search by Name -->
       <mat-form-field appearance="outline" class="search-field">
@@ -28,7 +29,6 @@
           matInput
           [(ngModel)]="searchName"
           placeholder="กรอกชื่อสถานที่"
-          (keyup)="onSearchNameKeyup($event)"
         />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
@@ -36,10 +36,7 @@
       <!-- Search by Country -->
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>เลือกประเทศ</mat-label>
-        <mat-select
-          [(ngModel)]="selectedCountry"
-          (selectionChange)="searchByCountry()"
-        >
+        <mat-select [(ngModel)]="selectedCountry">
           <mat-option value="">-- เลือกประเทศ --</mat-option>
           <mat-option *ngFor="let country of countries" [value]="country">
             {{ country }}
@@ -158,79 +155,4 @@
   </div>
 
   <!-- Trip Details Modal -->
-  <div
-    *ngIf="showDetails && selectedTrip"
-    class="modal-overlay"
-    (click)="closeTripDetails()"
-  >
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>{{ selectedTrip.name }}</h2>
-        <button mat-icon-button (click)="closeTripDetails()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="detail-image">
-          <img
-            [src]="selectedTrip.coverimage"
-            [alt]="selectedTrip.name"
-            onerror="this.src='assets/placeholder.jpg'"
-          />
-        </div>
-
-        <div class="detail-info">
-          <div class="info-grid">
-            <div class="info-card">
-              <mat-icon>tag</mat-icon>
-              <div>
-                <span class="label">หมายเลข</span>
-                <span class="value">#{{ selectedTrip.idx }}</span>
-              </div>
-            </div>
-
-            <div class="info-card">
-              <mat-icon>attach_money</mat-icon>
-              <div>
-                <span class="label">ราคา</span>
-                <span class="value"
-                  >฿{{ selectedTrip.price.toLocaleString() }}</span
-                >
-              </div>
-            </div>
-
-            <div class="info-card">
-              <mat-icon>schedule</mat-icon>
-              <div>
-                <span class="label">ระยะเวลา</span>
-                <span class="value">{{ selectedTrip.duration }} วัน</span>
-              </div>
-            </div>
-
-            <div class="info-card">
-              <mat-icon>public</mat-icon>
-              <div>
-                <span class="label">ประเทศ</span>
-                <span class="value">{{ selectedTrip.country }}</span>
-              </div>
-            </div>
-
-            <div class="info-card">
-              <mat-icon>map</mat-icon>
-              <div>
-                <span class="label">ทวีป/เขต</span>
-                <span class="value">{{ selectedTrip.destination_zone }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="description-section">
-            <h3>รายละเอียด</h3>
-            <p>{{ selectedTrip.detail }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

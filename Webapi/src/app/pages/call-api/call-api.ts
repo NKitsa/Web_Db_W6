@@ -90,64 +90,66 @@ export class CallApi implements OnInit {
   }
 
   async searchById() {
-    if (!this.searchId.trim() || !this.apiEndpoint) {
-      await this.loadAllTrips();
-      return;
-    }
-
-    this.isLoading = true;
-    try {
-      const url = `${this.apiEndpoint}/trip/${this.searchId}`;
-      const data = await lastValueFrom(this.http.get(url));
-      this.trips = [data as TripRes];
-      console.log('Search by ID completed');
-    } catch (error) {
-      console.error('Error searching by ID:', error);
-      this.trips = [];
-    } finally {
-      this.isLoading = false;
-    }
+  if (!this.searchId?.toString().trim() || !this.apiEndpoint) {
+    await this.loadAllTrips(); // ถ้าไม่กรอกอะไร ให้โหลดทั้งหมด
+    return;
   }
+
+  this.isLoading = true;
+  try {
+    const url = `${this.apiEndpoint}/trip/${this.searchId}`;
+    const data = await lastValueFrom(this.http.get(url));
+    this.trips = [data as TripRes]; // แสดงเป็น array เพื่อใช้ *ngFor ได้
+    console.log('Search by ID completed:', this.trips);
+  } catch (error) {
+    console.error('Error searching by ID:', error);
+    this.trips = [];
+  } finally {
+    this.isLoading = false;
+  }
+}
+
 
   async searchByName() {
-    if (!this.searchName.trim() || !this.apiEndpoint) {
-      await this.loadAllTrips();
-      return;
-    }
-
-    this.isLoading = true;
-    try {
-      const url = `${this.apiEndpoint}/trip/name/${this.searchName}`;
-      const data = await lastValueFrom(this.http.get(url));
-      this.trips = data as TripRes[];
-      console.log('Search by name completed');
-    } catch (error) {
-      console.error('Error searching by name:', error);
-      this.trips = [];
-    } finally {
-      this.isLoading = false;
-    }
+  if (!this.searchName.trim() || !this.apiEndpoint) {
+    await this.loadAllTrips();
+    return;
   }
 
-  async searchByCountry() {
-    if (!this.selectedCountry || !this.apiEndpoint) {
-      await this.loadAllTrips();
-      return;
-    }
-
-    this.isLoading = true;
-    try {
-      const url = `${this.apiEndpoint}/trip/country/${this.selectedCountry}`;
-      const data = await lastValueFrom(this.http.get(url));
-      this.trips = data as TripRes[];
-      console.log('Search by country completed');
-    } catch (error) {
-      console.error('Error searching by country:', error);
-      this.trips = [];
-    } finally {
-      this.isLoading = false;
-    }
+  this.isLoading = true;
+  try {
+    const url = `${this.apiEndpoint}/trip/search/fields?name=${encodeURIComponent(this.searchName)}`;
+    const data = await lastValueFrom(this.http.get(url));
+    this.trips = data as TripRes[];
+    console.log('Search by name completed:', this.trips);
+  } catch (error) {
+    console.error('Error searching by name:', error);
+    this.trips = [];
+  } finally {
+    this.isLoading = false;
   }
+}
+
+
+  // async searchByCountry() {
+  //   if (!this.selectedCountry || !this.apiEndpoint) {
+  //     await this.loadAllTrips();
+  //     return;
+  //   }
+
+  //   this.isLoading = true;
+  //   try {
+  //     const url = `${this.apiEndpoint}/trip/country/${this.selectedCountry}`;
+  //     const data = await lastValueFrom(this.http.get(url));
+  //     this.trips = data as TripRes[];
+  //     console.log('Search by country completed');
+  //   } catch (error) {
+  //     console.error('Error searching by country:', error);
+  //     this.trips = [];
+  //   } finally {
+  //     this.isLoading = false;
+  //   }
+  // }
 
   clearAllFilters() {
     this.searchId = '';
