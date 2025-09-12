@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { API } from '../model/trip_get_res';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -14,7 +13,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { TripRes } from '../../model/Response/Request/trip_res';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-call-api',
   standalone: true,
@@ -38,7 +37,8 @@ import { TripRes } from '../../model/Response/Request/trip_res';
 export class CallApi implements OnInit {
   constructor(
     private http: HttpClient,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   trips: TripRes[] = [];
@@ -131,25 +131,25 @@ export class CallApi implements OnInit {
 }
 
 
-  // async searchByCountry() {
-  //   if (!this.selectedCountry || !this.apiEndpoint) {
-  //     await this.loadAllTrips();
-  //     return;
-  //   }
+  async searchByCountry() {
+  if (!this.selectedCountry || !this.apiEndpoint) {
+    await this.loadAllTrips();
+    return;
+  }
 
-  //   this.isLoading = true;
-  //   try {
-  //     const url = `${this.apiEndpoint}/trip/country/${this.selectedCountry}`;
-  //     const data = await lastValueFrom(this.http.get(url));
-  //     this.trips = data as TripRes[];
-  //     console.log('Search by country completed');
-  //   } catch (error) {
-  //     console.error('Error searching by country:', error);
-  //     this.trips = [];
-  //   } finally {
-  //     this.isLoading = false;
-  //   }
-  // }
+  this.isLoading = true;
+  try {
+    const url = `${this.apiEndpoint}/trip/search/country?name=${this.selectedCountry}`;
+    const data = await lastValueFrom(this.http.get(url));
+    this.trips = data as TripRes[];
+    console.log('Search by country completed:', this.trips);
+  } catch (error) {
+    console.error('Error searching by country:', error);
+    this.trips = [];
+  } finally {
+    this.isLoading = false;
+  }
+}
 
   clearAllFilters() {
     this.searchId = '';
@@ -179,4 +179,8 @@ export class CallApi implements OnInit {
       this.searchByName();
     }
   }
+  goToDetail(idx: number) {
+  this.router.navigateByUrl(`/detail/${idx}`);
+  // console.log(idx);
+}
 }

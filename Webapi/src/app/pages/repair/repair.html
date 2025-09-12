@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แก้ไขทัวร์ - สิงคโปร์ SENTOSA ยูนิเวอร์แซล</title>
+  </head>
+  <body>
+    <!-- Header -->
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="page-title">
+        <h1>แก้ไขทัวร์: สิงคโปร์ SENTOSA ยูนิเวอร์แซล</h1>
+        <a href="#" class="btn">
+          <i class="fas fa-arrow-left"></i> กลับหน้ารายการทัวร์
+        </a>
+      </div>
+
+      <div class="form-container">
+        <form id="tourEditForm">
+          <!-- ข้อมูลพื้นฐาน -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i class="fas fa-info-circle"></i> ข้อมูลพื้นฐาน
+            </h2>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="tourName">ชื่อทัวร์</label>
+                <input
+                  type="text"
+                  id="tourName"
+                  class="form-control"
+                  name="name"
+                  [(ngModel)]="trip.name"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="tourCountry">ประเทศ</label>
+                <mat-form-field appearance="outline" class="search-field">
+                  <mat-label>เลือกประเทศ</mat-label>
+                  <mat-select name="country" [(ngModel)]="trip.country">
+                    <mat-option value="">-- เลือกประเทศ --</mat-option>
+                    <mat-option
+                      *ngFor="let country of country"
+                      [value]="country"
+                    >
+                      {{ country }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>public</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="form-group">
+                <label for="tourPrice">ราคา (THB)</label>
+                <input
+                  type="number"
+                  id="tourPrice"
+                  class="form-control"
+                  name="price"
+                  [(ngModel)]="trip.price"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="tourDuration">ระยะเวลา (วัน)</label>
+                <input
+                  type="number"
+                  id="tourDuration"
+                  class="form-control"
+                  name="duration"
+                  [(ngModel)]="trip.duration"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="tourZone">โซน</label>
+                <select
+                  id="tourZone"
+                  class="form-control"
+                  name="dest"
+                  [(ngModel)]="trip.destination_zone"
+                >
+                  <option value="" selected>--- ทวีป ---</option>
+                  <option *ngFor="let v of dest" value="v.idx">
+                    {{ v.zone }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- รูปภาพปก -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i class="fas fa-image"></i> รูปภาพปก
+            </h2>
+
+            <div class="form-group">
+              <label for="tourCoverImage">URL รูปภาพปก</label>
+              <input
+                type="text"
+                id="tourCoverImage"
+                class="form-control"
+                name="coverimage"
+                [(ngModel)]="trip.coverimage"
+              />
+            </div>
+
+            <div class="image-preview">
+              <img [src]="trip.coverimage" alt="ภาพปกทัวร์" id="coverPreview" />
+            </div>
+          </div>
+
+          <!-- รายละเอียดทัวร์ -->
+          <div class="form-section">
+            <h2 class="form-section-title">
+              <i class="fas fa-align-left"></i> รายละเอียดทัวร์
+            </h2>
+
+            <div class="form-group">
+              <label for="tourDetail">คำอธิบายทัวร์</label>
+              <textarea
+                id="tourDetail"
+                class="form-control"
+                name="detail"
+                [(ngModel)]="trip.detail"
+              >
+              </textarea>
+            </div>
+          </div>
+
+          <!-- การดำเนินการ -->
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline">
+              <i class="fas fa-times"></i> ยกเลิก
+            </button>
+            <button type="button" class="btn btn-secondary">
+              <i class="fas fa-eye"></i> ดูตัวอย่าง
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> บันทึกการเปลี่ยนแปลง
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

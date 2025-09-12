@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>สิงคโปร์ SENTOSA ยูนิเวอร์แซล - รายละเอียดทัวร์</title>
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <div class="container">
+      <div class="hero">
+        <div
+          class="hero-image"
+          [style.backgroundImage]="'url(' + trip.coverimage + ')'"
+        >
+          <div class="hero-overlay">
+            <div class="hero-content">
+              <h1>{{ trip.name }}</h1>
+              <div class="hero-meta">
+                <div class="meta-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>{{ trip.country }}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-clock"></i>
+                  <span>{{ trip.duration }}</span>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-tags"></i>
+                  <span>{{ trip.destination_zone }}</span>
+                </div>
+              </div>
+              <div class="price-tag">{{ trip.price }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+      <!-- Left Column - Tour Details -->
+      <div class="left-column">
+        <!-- Tour Highlights -->
+
+        <!-- Tour Details -->
+        <div class="section">
+          <h2 class="section-title">
+            <i class="fas fa-info-circle"></i>รายละเอียดทัวร์
+          </h2>
+          <p class="detail-content">
+            {{ trip.detail }}
+          </p>
+        </div>
+
+        <!-- Itinerary -->
+      </div>
+
+      <!-- Right Column - Booking Sidebar -->
+    </div>
+
+    <!-- Footer -->
+  </body>
+</html>

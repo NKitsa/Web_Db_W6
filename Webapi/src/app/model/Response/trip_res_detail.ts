@@ -1,4 +1,4 @@
-export interface TripResCountry {
+export interface TripResDetail {
     idx:              number;
     name:             string;
     country:          string;

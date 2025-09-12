@@ -34,9 +34,13 @@
       </mat-form-field>
 
       <!-- Search by Country -->
+      <!-- Search by Country -->
       <mat-form-field appearance="outline" class="search-field">
         <mat-label>เลือกประเทศ</mat-label>
-        <mat-select [(ngModel)]="selectedCountry">
+        <mat-select
+          [(ngModel)]="selectedCountry"
+          (selectionChange)="searchByCountry()"
+        >
           <mat-option value="">-- เลือกประเทศ --</mat-option>
           <mat-option *ngFor="let country of countries" [value]="country">
             {{ country }}
@@ -107,11 +111,7 @@
         (click)="showTripDetails(trip)"
       >
         <div class="card-image">
-          <img
-            [src]="trip.coverimage"
-            [alt]="trip.name"
-            onerror="this.src='assets/placeholder.jpg'"
-          />
+          <img [src]="trip.coverimage" [alt]="trip.name" />
           <div class="card-overlay">
             <span class="price">฿{{ trip.price.toLocaleString() }}</span>
           </div>
@@ -144,12 +144,12 @@
           </p>
         </mat-card-content>
 
-        <mat-card-actions>
-          <button mat-button color="primary">
+        <div>
+          <button mat-button color="primary" (click)="goToDetail(trip.idx)">
             <mat-icon>visibility</mat-icon>
             ดูรายละเอียด
           </button>
-        </mat-card-actions>
+        </div>
       </mat-card>
     </div>
   </div>
