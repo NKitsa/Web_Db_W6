@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { TripResDetail } from '../model/Response/trip_res_detail';
 import { TripResCountry } from '../model/Response/trip_res_country';
 import { TripResDestinationszone } from '../model/Response/trip_res_dest';
+import { Trip_req_id } from '../model/Response/Request/trip_req_id';
+import { Trip_req_add } from '../model/Response/Request/trip_req_add';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,5 +22,11 @@ export class Api {
   }
   getDestination_zone():Observable<TripResDestinationszone []>{
     return this.http.get<TripResDestinationszone []>(`${this.url}/trip/destinations`)
+  }
+  setTripId(id:string,body:Trip_req_id){
+    return this.http.put(`${this.url}/trip/${id}`,body)
+  }
+  setCreate_trip(body:Trip_req_add){
+    return this.http.post(`${this.url}/trip`,body)
   }
 }

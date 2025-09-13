@@ -33,7 +33,7 @@
                   id="tourName"
                   class="form-control"
                   name="name"
-                  [(ngModel)]="trip.name"
+                  [(ngModel)]="create_trip.name"
                 />
               </div>
 
@@ -41,7 +41,7 @@
                 <label for="tourCountry">ประเทศ</label>
                 <mat-form-field appearance="outline" class="search-field">
                   <mat-label>เลือกประเทศ</mat-label>
-                  <mat-select name="country" [(ngModel)]="trip.country">
+                  <mat-select name="country" [(ngModel)]="create_trip.country">
                     <mat-option value="">-- เลือกประเทศ --</mat-option>
                     <mat-option
                       *ngFor="let country of country"
@@ -61,7 +61,7 @@
                   id="tourPrice"
                   class="form-control"
                   name="price"
-                  [(ngModel)]="trip.price"
+                  [(ngModel)]="create_trip.price"
                 />
               </div>
 
@@ -72,7 +72,7 @@
                   id="tourDuration"
                   class="form-control"
                   name="duration"
-                  [(ngModel)]="trip.duration"
+                  [(ngModel)]="create_trip.duration"
                 />
               </div>
 
@@ -82,7 +82,7 @@
                   <mat-label>เลือกทวีป</mat-label>
                   <mat-select
                     name="destinationid"
-                    [(ngModel)]="trip.destinationid"
+                    [(ngModel)]="create_trip.destinationid"
                   >
                     <mat-option value="">-- เลือกทวีป --</mat-option>
                     <mat-option *ngFor="let v of dest" [value]="v.idx">
@@ -108,12 +108,16 @@
                 id="tourCoverImage"
                 class="form-control"
                 name="coverimage"
-                [(ngModel)]="trip.coverimage"
+                [(ngModel)]="create_trip.coverimage"
               />
             </div>
 
             <div class="image-preview">
-              <img [src]="trip.coverimage" alt="ภาพปกทัวร์" id="coverPreview" />
+              <img
+                [src]="create_trip.coverimage"
+                alt="ภาพปกทัวร์"
+                id="coverPreview"
+              />
             </div>
           </div>
 
@@ -129,7 +133,7 @@
                 id="tourDetail"
                 class="form-control"
                 name="detail"
-                [(ngModel)]="trip.detail"
+                [(ngModel)]="create_trip.detail"
               >
               </textarea>
             </div>
@@ -140,7 +144,7 @@
             <button
               type="button"
               class="btn btn-outline"
-              (click)="setTrip_Id()"
+              (click)="setCreate_trip()"
             >
               <i class="fas fa-times"></i> แก้ไขข้อมูล
             </button>

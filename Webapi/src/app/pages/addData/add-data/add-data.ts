@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { TripResDetail } from '../../model/Response/trip_res_detail';
+import { TripResDetail } from '../../../model/Response/trip_res_detail';
 import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
-import { Api } from '../../service/api';
+import { Api } from '../../../service/api';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -13,11 +13,12 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TripResCountry } from '../../model/Response/trip_res_country';
-import { TripResDestinationszone } from '../../model/Response/trip_res_dest';
-import { Trip_req_id } from '../../model/Response/Request/trip_req_id';
+import { TripResCountry } from '../../../model/Response/trip_res_country';
+import { TripResDestinationszone } from '../../../model/Response/trip_res_dest';
+import { Trip_req_id } from '../../../model/Response/Request/trip_req_id';
+import { Trip_req_add } from '../../../model/Response/Request/trip_req_add';
 @Component({
-  selector: 'app-repair',
+  selector: 'app-adddata',
   imports: [CommonModule,
     MatInputModule,
     MatCardModule,
@@ -28,15 +29,14 @@ import { Trip_req_id } from '../../model/Response/Request/trip_req_id';
     MatDialogModule,
     MatIconModule,
     FormsModule],
-  templateUrl: './repair.html',
-  styleUrl: './repair.scss'
+  templateUrl: './add-data.html',
+  styleUrl: './add-data.scss'
 })
-export class Repair {
-  idx: string = "";
+export class AddData {
   trip !: TripResDetail;
   country !: String [];
   dest !: TripResDestinationszone [];
-  update_trip: Trip_req_id = {
+create_trip: Trip_req_add = {
   name: '',
   country: '',
   coverimage: '',
@@ -46,13 +46,9 @@ export class Repair {
   detail: ''
 };
   constructor(private activeatedRoute: ActivatedRoute,private router: Router,private route: ActivatedRoute,private Api:Api) {
-    this.idx = this.route.snapshot.paramMap.get('id') || "1";
     
   }
-  async getDetail(idx:string){
-    this.trip = await lastValueFrom(this.Api.getDetail(idx));
-    console.log(this.trip);
-  }
+  
   async getCountry(){
     this.country = await lastValueFrom(this.Api.getCountry());
     console.log(this.country);
@@ -61,23 +57,17 @@ export class Repair {
     this.dest = await lastValueFrom(this.Api.getDestination_zone());
     console.log(this.dest);
   }
-  async setTrip_Id(){
-    this.update_trip.name = this.trip.name;
-    this.update_trip.country = this.trip.country;
-    this.update_trip.coverimage = this.trip.coverimage;
-    this.update_trip.destinationid = this.trip.destinationid;
-    this.update_trip.duration = this.trip.duration;
-    this.update_trip.price = this.trip.price;
-    this.update_trip.detail = this.trip.detail;
-    await lastValueFrom(this.Api.setTripId(this.idx,this.update_trip));
+  async setCreate_trip(){
+    
+    await lastValueFrom(this.Api.setCreate_trip(this.create_trip));
     this.router.navigate(["/"]);
-    // console.log(this.update_trip)
-
+    // console.log(this.create_trip)
   }
+ 
   ngOnInit(){
-    this.getDetail(this.idx);
     this.getCountry();
     this.getDest();
+
   }
 
   
