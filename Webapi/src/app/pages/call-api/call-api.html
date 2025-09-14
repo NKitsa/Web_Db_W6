@@ -1,3 +1,9 @@
+<div style="display: flex; justify-content: end; padding-right: 100px">
+  <button mat-raised-button color="primary" (click)="goToCreate()">
+    เพิ่มข้อมูลใหม่
+  </button>
+</div>
+
 <div class="p-4">
   <!-- แสดง list ของ trips -->
   <div *ngIf="trips && trips.length > 0; else noData">
@@ -15,7 +21,7 @@
           <p><b>ประเทศ:</b> {{ t.country }}</p>
           <p><b>ระยะเวลา:</b> {{ t.duration }} วัน</p>
           <p><b>ทวีป:</b> {{ t.destination_zone }}</p>
-          <p><b>รายละเอียด:</b> {{ t.detail }}</p>
+          <!-- <p><b>รายละเอียด:</b> {{ t.detail }}</p> -->
         </mat-card-content>
         <button (click)="goToDetail(t.idx)">ดูรายละเอียด</button>
       </mat-card>

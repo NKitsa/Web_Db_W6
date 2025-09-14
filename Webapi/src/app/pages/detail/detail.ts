@@ -19,6 +19,9 @@ export class Detail {
     this.trip = await lastValueFrom(this.Api.getDetail(idx));
     console.log(this.trip);
   }
+  goToRepair(idx: number) {
+  this.router.navigateByUrl(`/repair/${idx}`);
+}
   ngOnInit(){
     this.getDetail(this.idx);
   }

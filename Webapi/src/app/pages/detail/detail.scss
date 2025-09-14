@@ -475,3 +475,69 @@
           grid-template-columns: 1fr;
         }
       }
+      button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.25);
+  position: relative;
+  overflow: hidden;
+  margin-left: auto; // ทำให้ปุ่มชิดขวา
+  margin-right: 0; // 確保右邊沒有間距
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
+  }
+  
+  // ไอคอนแก้ไข
+  &::after {
+    content: '✏️';
+    margin-left: 0.4rem;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover::after {
+    transform: scale(1.1) rotate(10deg);
+  }
+}
+
+// หากปุ่มยังไม่ชิดขวา ให้เพิ่ม style นี้
+.gege {
+  display: flex;
+  justify-content: flex-end; // จัดเนื้อหาชิดขวา
+  width: 100%;
+  margin-left: -20%;
+  margin-top: 3%;
+  
+}

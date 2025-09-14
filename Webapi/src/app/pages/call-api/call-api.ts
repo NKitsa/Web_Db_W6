@@ -62,5 +62,7 @@ export class CallApi implements OnInit {
    goToDetail(idx: number) {
   this.router.navigateByUrl(`/detail/${idx}`);
 }
-  
+  goToCreate() {
+  this.router.navigate(["/adddata"]);
+}
 }
