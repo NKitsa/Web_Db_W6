@@ -58,12 +58,11 @@ create_trip: Trip_req_add = {
     console.log(this.dest);
   }
   async setCreate_trip(){
-    
     await lastValueFrom(this.Api.setCreate_trip(this.create_trip));
     this.router.navigate(["/"]);
     // console.log(this.create_trip)
   }
- 
+  
   ngOnInit(){
     this.getCountry();
     this.getDest();

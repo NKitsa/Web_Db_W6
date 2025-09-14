@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { TripRes } from '../../model/Response/Request/trip_res';
 import { Router } from '@angular/router';
+import { Api } from '../../service/api';
+import { TripResDetail } from '../../model/Response/trip_res_detail';
 @Component({
   selector: 'app-call-api',
   standalone: true,
@@ -38,149 +40,27 @@ export class CallApi implements OnInit {
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private Api:Api
+
   ) {}
 
-  trips: TripRes[] = [];
-  countries: string[] = [];
-  isLoading: boolean = false;
-  apiEndpoint: string = '';
-  
-  // Search filters
-  searchId: string = '';
-  searchName: string = '';
-  selectedCountry: string = '';
-
-  // Selected trip for details
-  selectedTrip: TripRes | null = null;
-  showDetails: boolean = false;
-
+  trips!: TripRes [];
+  trip_idx !: TripResDetail;
+  idx: string = "";
   async ngOnInit() {
-    try {
-      const config: any = await lastValueFrom(this.http.get('/config.json'));
-      this.apiEndpoint = config.apiEndpoint;
-      console.log('✅ Loaded API endpoint:', this.apiEndpoint);
-      
-      // Load all trips initially and extract countries
-      await this.loadAllTrips();
-    } catch (err) {
-      console.error('❌ Cannot load config.json', err);
-    }
+   this.getTrip();
   }
-
-  async loadAllTrips() {
-    if (!this.apiEndpoint) return;
-
-    this.isLoading = true;
-    try {
-      const url = `${this.apiEndpoint}/trip`;
-      const data = await lastValueFrom(this.http.get(url));
-      this.trips = data as TripRes[];
-      
-      // Extract unique countries for dropdown
-      this.countries = [...new Set(this.trips.map(trip => trip.country))].sort();
-      
-      console.log('All trips loaded:', this.trips.length);
-    } catch (error) {
-      console.error('Error loading trips:', error);
-      this.trips = [];
-    } finally {
-      this.isLoading = false;
-    }
+  async getTrip(){
+    this.trips = await lastValueFrom(this.Api.getTrip_page());
+    console.log(this.trips);
   }
-
-  async searchById() {
-  if (!this.searchId?.toString().trim() || !this.apiEndpoint) {
-    await this.loadAllTrips(); // ถ้าไม่กรอกอะไร ให้โหลดทั้งหมด
-    return;
+  async get_id(idx:string){
+    this.trip_idx = await lastValueFrom(this.Api.getDetail(idx));
+    console.log(this.trip_idx);
   }
-
-  this.isLoading = true;
-  try {
-    const url = `${this.apiEndpoint}/trip/${this.searchId}`;
-    const data = await lastValueFrom(this.http.get(url));
-    this.trips = [data as TripRes]; // แสดงเป็น array เพื่อใช้ *ngFor ได้
-    console.log('Search by ID completed:', this.trips);
-  } catch (error) {
-    console.error('Error searching by ID:', error);
-    this.trips = [];
-  } finally {
-    this.isLoading = false;
-  }
-}
-
-
-  async searchByName() {
-  if (!this.searchName.trim() || !this.apiEndpoint) {
-    await this.loadAllTrips();
-    return;
-  }
-
-  this.isLoading = true;
-  try {
-    const url = `${this.apiEndpoint}/trip/search/fields?name=${encodeURIComponent(this.searchName)}`;
-    const data = await lastValueFrom(this.http.get(url));
-    this.trips = data as TripRes[];
-    console.log('Search by name completed:', this.trips);
-  } catch (error) {
-    console.error('Error searching by name:', error);
-    this.trips = [];
-  } finally {
-    this.isLoading = false;
-  }
-}
-
-
-  async searchByCountry() {
-  if (!this.selectedCountry || !this.apiEndpoint) {
-    await this.loadAllTrips();
-    return;
-  }
-
-  this.isLoading = true;
-  try {
-    const url = `${this.apiEndpoint}/trip/search/country?name=${this.selectedCountry}`;
-    const data = await lastValueFrom(this.http.get(url));
-    this.trips = data as TripRes[];
-    console.log('Search by country completed:', this.trips);
-  } catch (error) {
-    console.error('Error searching by country:', error);
-    this.trips = [];
-  } finally {
-    this.isLoading = false;
-  }
-}
-
-  clearAllFilters() {
-    this.searchId = '';
-    this.searchName = '';
-    this.selectedCountry = '';
-    this.loadAllTrips();
-  }
-
-  showTripDetails(trip: TripRes) {
-    this.selectedTrip = trip;
-    this.showDetails = true;
-  }
-
-  closeTripDetails() {
-    this.selectedTrip = null;
-    this.showDetails = false;
-  }
-
-  onSearchIdKeyup(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.searchById();
-    }
-  }
-
-  onSearchNameKeyup(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.searchByName();
-    }
-  }
-  goToDetail(idx: number) {
+   goToDetail(idx: number) {
   this.router.navigateByUrl(`/detail/${idx}`);
-  // console.log(idx);
 }
+  
 }
