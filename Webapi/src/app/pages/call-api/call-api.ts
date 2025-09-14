@@ -48,9 +48,18 @@ export class CallApi implements OnInit {
   trips!: TripRes [];
   trip_idx !: TripResDetail;
   idx: string = "";
+  country: string = "";
   async ngOnInit() {
    this.getTrip();
   }
+  async searchCountry(name: string) {
+  try {
+    this.trips = await lastValueFrom(this.Api.searchByCountry(name));
+    console.log("ผลลัพธ์:", this.trips);
+  } catch (err) {
+    console.error("เกิดข้อผิดพลาด:", err);
+  }
+}
   async getTrip(){
     this.trips = await lastValueFrom(this.Api.getTrip_page());
     console.log(this.trips);
@@ -59,6 +68,7 @@ export class CallApi implements OnInit {
     this.trip_idx = await lastValueFrom(this.Api.getDetail(idx));
     console.log(this.trip_idx);
   }
+  
    goToDetail(idx: number) {
   this.router.navigateByUrl(`/detail/${idx}`);
 }

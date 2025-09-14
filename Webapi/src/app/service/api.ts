@@ -21,6 +21,12 @@ export class Api {
   getDetail(id:string):Observable<TripResDetail>{
     return this.http.get<TripResDetail>(`${this.url}/trip/${id}`)
   }
+searchByCountry(name: string): Observable<TripRes[]> {
+  return this.http.get<TripRes[]>(`${this.url}/trip/search/country`, {
+    params: { name }
+  });
+}
+
   getCountry():Observable<String []>{
     return this.http.get<String []>(`${this.url}/trip/country`)
   }

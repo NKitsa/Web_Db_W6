@@ -1,9 +1,54 @@
-<div style="display: flex; justify-content: end; padding-right: 100px">
-  <button mat-raised-button color="primary" (click)="goToCreate()">
-    เพิ่มข้อมูลใหม่
-  </button>
-</div>
+<div style="margin-bottom: 20px">
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 100px;
+      margin-bottom: 15px;
+    "
+  >
+    <button mat-raised-button color="primary" (click)="goToCreate()">
+      เพิ่มข้อมูลใหม่
+    </button>
+  </div>
 
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 100px;
+      margin-bottom: 15px;
+    "
+  >
+    <mat-form-field
+      appearance="outline"
+      class="flex-1"
+      style="margin-right: 10px"
+    >
+      <mat-label>ค้นหาประเทศ</mat-label>
+      <input
+        matInput
+        [(ngModel)]="country"
+        placeholder="กรอกชื่อประเทศ เช่น ญี่ปุ่น"
+      />
+    </mat-form-field>
+  </div>
+  <div
+    style="
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 100px;
+      gap: 10px;
+    "
+  >
+    <button mat-raised-button color="accent" (click)="searchCountry(country)">
+      🔍 ค้นหาประเทศ
+    </button>
+    <button mat-stroked-button color="warn" (click)="getTrip()">
+      ♻️ รีเซ็ต
+    </button>
+  </div>
+</div>
 <div class="p-4">
   <!-- แสดง list ของ trips -->
   <div *ngIf="trips && trips.length > 0; else noData">
