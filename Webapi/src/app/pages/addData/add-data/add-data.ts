@@ -46,9 +46,9 @@ create_trip: Trip_req_add = {
   detail: ''
 };
   constructor(private activeatedRoute: ActivatedRoute,private router: Router,private route: ActivatedRoute,private Api:Api) {
-    
+
   }
-  
+
   async getCountry(){
     this.country = await lastValueFrom(this.Api.getCountry());
     console.log(this.country);
@@ -58,19 +58,18 @@ create_trip: Trip_req_add = {
     console.log(this.dest);
   }
   async setCreate_trip(){
-    
     await lastValueFrom(this.Api.setCreate_trip(this.create_trip));
     this.router.navigate(["/"]);
     // console.log(this.create_trip)
   }
- 
+
   ngOnInit(){
     this.getCountry();
     this.getDest();
 
   }
 
-  
 
-  
+
+
 }

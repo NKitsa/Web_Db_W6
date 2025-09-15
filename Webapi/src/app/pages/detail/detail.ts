@@ -19,8 +19,30 @@ export class Detail {
     this.trip = await lastValueFrom(this.Api.getDetail(idx));
     console.log(this.trip);
   }
+  goToRepair(idx: number) {
+  this.router.navigateByUrl(`/repair/${idx}`);
+  }
+  async deleteTrip(idx: string) {
+  try {
+    const res = await lastValueFrom(this.Api.deleteTrip(idx));
+    console.log(res.message); // Trip deleted successfully
+    alert("ลบข้อมูลเรียบร้อยแล้ว");
+    this.router.navigateByUrl("/"); // หลังลบเสร็จ กลับไปหน้า list
+  } catch (err) {
+    console.error("ลบไม่สำเร็จ:", err);
+    alert("❌ ไม่สามารถลบข้อมูลได้");
+  }
+}
+confirmDelete(idx: string) {
+  const confirmed = confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?");
+  if (confirmed) {
+    this.deleteTrip(idx);
+  }
+}
+
+
   ngOnInit(){
     this.getDetail(this.idx);
   }
-  
+
 }
