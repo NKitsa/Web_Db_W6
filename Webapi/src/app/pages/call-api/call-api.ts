@@ -16,6 +16,7 @@ import { TripRes } from '../../model/Response/Request/trip_res';
 import { Router } from '@angular/router';
 import { Api } from '../../service/api';
 import { TripResDetail } from '../../model/Response/trip_res_detail';
+import { ResName } from '../../model/Response/trip_res_name';
 @Component({
   selector: 'app-call-api',
   standalone: true,
@@ -46,20 +47,46 @@ export class CallApi implements OnInit {
   ) {}
 
   trips!: TripRes [];
+  trip_name!: ResName [];
   trip_idx !: TripResDetail;
   idx: string = "";
-  country: string = "";
+  country!: String[];
+  searchcountry: String = "-- เลือกประเทศ --";
+  searchname: String = "";
+  tripId: String = "";
+
   async ngOnInit() {
    this.getTrip();
+   this.getCountry();
   }
-  async searchCountry(name: string) {
+  async searchCountry() {
   try {
-    this.trips = await lastValueFrom(this.Api.searchByCountry(name));
+    this.trips = await lastValueFrom(this.Api.searchByCountry(this.searchcountry as string));
     console.log("ผลลัพธ์:", this.trips);
   } catch (err) {
     console.error("เกิดข้อผิดพลาด:", err);
   }
 }
+async searchName() {
+  try {
+    this.trips = await lastValueFrom(this.Api.searchByName(this.searchname as string));
+    console.log("ผลลัพธ์ (ค้นหาตามชื่อ):", this.trips);
+  } catch (err) {
+    console.error("เกิดข้อผิดพลาด (searchName):", err);
+  }
+}
+async searchById() {
+    try {
+      this.trips = await lastValueFrom(this.Api.getId(this.tripId as string));
+      console.log("ผลลัพธ์ (ค้นหาตาม ID):", this.trips);
+    } catch (err) {
+      console.error("เกิดข้อผิดพลาด:", err);
+    }
+  }
+async getCountry(){
+    this.country = await lastValueFrom(this.Api.getCountry());
+    console.log(this.country);
+  }
   async getTrip(){
     this.trips = await lastValueFrom(this.Api.getTrip_page());
     console.log(this.trips);

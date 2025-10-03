@@ -7,31 +7,41 @@
       margin-bottom: 15px;
     "
   >
-    <button mat-raised-button color="primary" (click)="goToCreate()">
-      เพิ่มข้อมูลใหม่
-    </button>
-  </div>
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>ค้นหาทริปตาม ID</mat-label>
+    <input
+      matInput
+      placeholder="กรอก ID..."
+      [(ngModel)]="tripId"
+      (keyup.enter)="searchById()" />
+  </mat-form-field>
 
-  <div
-    style="
-      display: flex;
-      justify-content: flex-end;
-      padding-right: 100px;
-      margin-bottom: 15px;
-    "
-  >
-    <mat-form-field
-      appearance="outline"
-      class="flex-1"
-      style="margin-right: 10px"
-    >
-      <mat-label>ค้นหาประเทศ</mat-label>
-      <input
-        matInput
-        [(ngModel)]="country"
-        placeholder="กรอกชื่อประเทศ เช่น ญี่ปุ่น"
-      />
-    </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>ค้นหาตามชื่อ</mat-label>
+    <input
+      matInput
+      placeholder="กรอกชื่อทริป..."
+      [(ngModel)]="searchname"
+      (keyup.enter)="searchName()" />
+  </mat-form-field>
+
+  <!-- ปุ่มค้นหา -->
+
+    <div class="form-group">
+                <mat-form-field appearance="outline" class="search-field">
+                  <mat-label>เลือกประเทศ</mat-label>
+                  <mat-select name="country" [(ngModel)]="searchcountry"(selectionChange)="searchCountry()">
+                    <mat-option
+                      *ngFor="let country of country"
+                      [value]="country"
+                    >
+                      {{ country }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>public</mat-icon>
+                </mat-form-field>
+              </div>
   </div>
   <div
     style="
@@ -41,9 +51,14 @@
       gap: 10px;
     "
   >
-    <button mat-raised-button color="accent" (click)="searchCountry(country)">
-      🔍 ค้นหาประเทศ
-    </button>
+  <button mat-raised-button color="primary" (click)="searchById()">
+    ค้นหาด้วยid
+  </button>
+  <button mat-raised-button color="primary" (click)="searchName()">
+    ค้นหาด้วยชื่อ
+  </button>
+  <button mat-raised-button color="primary" (click)="goToCreate()">เพิ่มข้อมูลใหม่</button>
+
     <button mat-stroked-button color="warn" (click)="getTrip()">
       ♻️ รีเซ็ต
     </button>

@@ -8,6 +8,7 @@ import { TripResDestinationszone } from '../model/Response/trip_res_dest';
 import { Trip_req_id } from '../model/Response/Request/trip_req_id';
 import { Trip_req_add } from '../model/Response/Request/trip_req_add';
 import { TripRes } from '../model/Response/Request/trip_res';
+import { ResName } from '../model/Response/trip_res_name';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,8 +22,16 @@ export class Api {
   getDetail(id:string):Observable<TripResDetail>{
     return this.http.get<TripResDetail>(`${this.url}/trip/${id}`)
   }
+  getId(id:string):Observable<TripRes[]>{
+    return this.http.get<TripRes[]>(`${this.url}/trip/search/${id}`)
+  }
 searchByCountry(name: string): Observable<TripRes[]> {
   return this.http.get<TripRes[]>(`${this.url}/trip/search/country`, {
+    params: { name }
+  });
+}
+searchByName(name: string): Observable<TripRes[]> {
+  return this.http.get<TripRes[]>(`${this.url}/trip/search/fields`, {
     params: { name }
   });
 }
